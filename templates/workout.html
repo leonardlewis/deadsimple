@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>{{ day }}</h1>
+<table class="center" id="workout">
+  <tr>
+    <th>Exercise</th>
+    <th>Weight</th>
+    <th>Reps</th>
+    <th>Delete</th>
+  </tr>
+  {% for item in data %}
+  <tr>
+    <td>{{item.type}}</td>
+    <td>{{item.weight}}</td>
+    <td>{{item.reps}}</td>
+    <td>
+      <form action="/delete-exercise?id={{item.id}}&day={{day}}" method="POST">
+        <input type="submit" value="Delete" class="delete">
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+<form action="/add-exercise?day={{ day }}" method="POST">
+  <input type="text" name="type" placeholder="Enter an exercise">
+  <input type="number" name="weight" placeholder="Enter weight (lbs)">
+  <input type="number" name="reps" placeholder="Enter number of reps">
+  <input type="submit" value="Add">
+</form>
+<a href="/account" class="cta">Go back</a>
+{% endblock %}
