@@ -118,7 +118,7 @@ def do_delete_exercise():
     return redirect(f'/workout?day={day}')
 
 # YOU SHOULD CHANGE THIS WHEN YOU PUT ON THE INTERNET
-app.secret_key = 'A0Zr98j/3yX R-XHH! jmNJLWX/,?RT'
+app.secret_key = b'\xc0\xac~\x1f\xa8\xd6\x0c)\x16-:\xbeC\xef{\xab'
 
 if __name__ == "__main__":
     app.run()
