@@ -1,3 +1,6 @@
+# http://blog.appliedinformaticsinc.com/managing-cron-jobs-with-python-crontab/
+# https://vitalets.github.io/combodate/
+
 from flask import Flask, session, redirect, render_template, url_for, request
 from flask import flash, request
 from sqlalchemy import create_engine
