@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, ForeignKey
-from sqlalchemy import Column, Date, Integer, String, Boolean, Text
+from sqlalchemy import Column, Date, Integer, String, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 
@@ -15,22 +15,20 @@ class User(Base):
     email = Column(String)
     password = Column(String)
     phone = Column(Integer)
-    logged_in = Column(Boolean)
 
-    def __init__(self, first_name, last_name, email, password, phone, logged_in):
+    def __init__(self, first_name, last_name, email, password, phone):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
         self.password = password
         self.phone = phone
-        self.logged_in = logged_in
 
 class Exercise(Base):
     __tablename__ = "exercises"
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'))
-    day = Column(String)
+    day = Column(Integer)
     type = Column(String)
     weight = Column(Integer)
     reps = Column(Integer)
@@ -47,7 +45,7 @@ class Workout(Base):
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'))
-    day = Column(String)
+    day = Column(Integer)
     time = Column(Text)
 
     def __init__(self, user_id, day, time):

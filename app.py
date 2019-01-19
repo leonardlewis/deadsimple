@@ -1,5 +1,4 @@
 # http://blog.appliedinformaticsinc.com/managing-cron-jobs-with-python-crontab/
-# https://vitalets.github.io/combodate/
 
 from flask import Flask, session, redirect, render_template, url_for, request
 from flask import flash, request
@@ -33,8 +32,7 @@ def do_create_user():
     Session = sessionmaker(bind=engine)
     s = Session()
 
-    # Set logged_in to False when user gets created.
-    user = User(POST_FIRST, POST_LAST, POST_EMAIL, POST_PASSWORD, POST_NUMBER, False)
+    user = User(POST_FIRST, POST_LAST, POST_EMAIL, POST_PASSWORD, POST_NUMBER)
     s.add(user)
     s.commit()
 
@@ -57,7 +55,6 @@ def do_authenticate():
         session['logged_in'] = True
         session['email'] = user.email
         session['id'] = user.id
-        user.logged_in = True
         s.commit()
     else:
         flash('Wrong password!')
@@ -76,21 +73,32 @@ def do_logout():
     session['logged_in']=False
     return redirect('/')
 
+days = {"Monday": 0,
+        "Tuesday": 1,
+        "Wednesday": 2,
+        "Thursday": 3,
+        "Friday": 4,
+        "Saturday": 5,
+        "Sunday": 6
+       }
+
 @app.route("/workout")
 def show_workout():
-    day = request.args.get('day', 'monday')
+    day_text = request.args.get('day', 'monday')
+    day = days[day_text]
     user_id = session['id']
 
     Session = sessionmaker(bind=engine)
     s = Session()
     result = s.query(Exercise).filter(Exercise.user_id == user_id, Exercise.day == day)
 
-    return render_template('workout.html', day=day, data=result)
+    return render_template('workout.html', day=day_text, data=result)
 
 @app.route("/add-exercise", methods = ['POST'])
 def do_add_exercise():
     user_id = session['id']
-    day = request.args.get('day', 'Monday')
+    day_text = request.args.get('day', 'Monday')
+    day = days[day_text]
     type = request.form['type']
     weight = request.form['weight']
     reps = request.form['reps']
@@ -102,7 +110,7 @@ def do_add_exercise():
     s.add(exercise)
     s.commit()
 
-    return redirect(f'/workout?day={day}')
+    return redirect(f'/workout?day={day_text}')
 
 @app.route("/delete-exercise", methods = ['POST'])
 # Make this work: https://stackoverflow.com/questions/3915917/make-a-link-use-post-instead-of-get
