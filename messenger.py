@@ -13,7 +13,13 @@ localtime = time.localtime(time.time())
 Session = sessionmaker(bind=engine)
 s = Session()
 query = s.query(Exercise).filter(Exercise.day == localtime[6])
-print(query.first())
+
+# Create a deduplicated list of user IDs from the query.
+users = set()
+for x in query:
+    users.add(x.user_id)
+
+print(users)
 
 # For each user in the query, send a message to their number.
 # Send a message to the user: "You're ready to workout! Reply "Y" to start or
