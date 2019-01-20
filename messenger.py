@@ -19,17 +19,17 @@ users = set()
 for x in query:
     users.add(x.user_id)
 
-print(users)
-
 # For each user in the query, send a message to their number.
-# Send a message to the user: "You're ready to workout! Reply "Y" to start or
-# N to cancel.
-# start_message = client.messages.create(
-#        to="+12164029029",
-#        from_=number,
-#        body="Good morning! Please reply 'Y' to start your Dead Simple workout or 'N' to cancel for today.")
+for x in users:
+    recipient = s.query(User).filter(User.id == x)
+    for y in recipient:
+        to_number = y.phone
+        start_message = client.messages.create(
+            to = str(to_number),
+            from_=number,
+            body="Good morning! Please reply 'Y' to start your Dead Simple workout or 'N' to cancel for today.")
 
-# print(start_message.sid)
+print(start_message.sid)
 
 # Receive response from user and reply "Your first exercise is X" or "OK, see you
 # tomorrow!"
