@@ -1,5 +1,7 @@
 # http://blog.appliedinformaticsinc.com/managing-cron-jobs-with-python-crontab/
+# https://realpython.com/flask-by-example-part-1-project-setup/
 
+import os
 from flask import Flask, session, redirect, render_template, url_for, request
 from flask import flash, request
 from twilio.twiml.messaging_response import MessagingResponse
@@ -129,8 +131,19 @@ def do_delete_exercise():
 
     return redirect(f'/workout?day={day}')
 
-# YOU SHOULD CHANGE THIS WHEN YOU PUT ON THE INTERNET
-app.secret_key = b'\xc0\xac~\x1f\xa8\xd6\x0c)\x16-:\xbeC\xef{\xab'
+@app.route("/sms", methods=['GET', 'POST'])
+def sms_reply():
+    """Respond to incoming calls with a simple text message."""
+    # Start our TwiML response
+    resp = MessagingResponse()
+
+    # Add a message
+    resp.message("The Robots are coming! Head for the hills!")
+
+    return str(resp)
+
+print(os.environ['APP_SETTINGS'])
+print(os.environ['SECRET_KEY'])
 
 if __name__ == "__main__":
     app.run()
