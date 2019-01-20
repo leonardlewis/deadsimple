@@ -12,6 +12,7 @@ from tabledef import *
 engine = create_engine('sqlite:///deadsimple.db', echo=True)
 
 app = Flask(__name__)
+app.config.from_object(os.environ['APP_SETTINGS'])
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -142,8 +143,7 @@ def sms_reply():
 
     return str(resp)
 
-print(os.environ['APP_SETTINGS'])
-print(os.environ['SECRET_KEY'])
+print(app.config)
 
 if __name__ == "__main__":
     app.run()
