@@ -2,6 +2,7 @@
 
 from flask import Flask, session, redirect, render_template, url_for, request
 from flask import flash, request
+from twilio.twiml.messaging_response import MessagingResponse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from tabledef import *

@@ -28,8 +28,7 @@ for x in users:
             to = str(to_number),
             from_=number,
             body="Good morning! Please reply 'Y' to start your Dead Simple workout or 'N' to cancel for today.")
-
-print(start_message.sid)
+        print(start_message.sid)
 
 # Receive response from user and reply "Your first exercise is X" or "OK, see you
 # tomorrow!"
