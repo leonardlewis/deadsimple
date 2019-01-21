@@ -1,9 +1,12 @@
+# Some references
 # http://blog.appliedinformaticsinc.com/managing-cron-jobs-with-python-crontab/
 # https://realpython.com/flask-by-example-part-1-project-setup/
+# http://flask.pocoo.org/docs/1.0/config/
 
 import os
+import time
 from flask import Flask, session, redirect, render_template, url_for, request
-from flask import flash, request
+from flask import flash
 from twilio.twiml.messaging_response import MessagingResponse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -135,11 +138,34 @@ def do_delete_exercise():
 @app.route("/sms", methods=['GET', 'POST'])
 def sms_reply():
     """Respond to incoming calls with a simple text message."""
-    # Start our TwiML response
+
+    user_number_raw = request.values.get('From')
+
+    # This is a hack to remove the country code.
+    user_number = user_number_raw[2:]
+
+    message = request.values.get('Body')
+    localtime = time.localtime(time.time())
     resp = MessagingResponse()
 
-    # Add a message
-    resp.message("The Robots are coming! Head for the hills!")
+    counter = session.get('counter', 0)
+    session['counter'] = counter
+
+    if message == 'Y':
+        counter += 1
+
+        Session = sessionmaker(bind=engine)
+        s = Session()
+
+        query = s.query(User).filter(User.phone == user_number)
+        user = query.first()
+        exercises = s.query(Exercise).filter(Exercise.user_id == user.id, Exercise.day == localtime[6])
+
+        for x in exercises:
+            resp.message(f"All right, go do {x.type}, {x.weight}, {x.reps}.")
+
+    else:
+        resp.message("OK, see you next time!")
 
     return str(resp)
 
