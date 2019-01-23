@@ -1,5 +1,6 @@
+import datetime
 from sqlalchemy import create_engine, ForeignKey
-from sqlalchemy import Column, Date, Integer, String, Text
+from sqlalchemy import Column, DateTime, Integer, String, Text, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 
@@ -40,17 +41,22 @@ class Exercise(Base):
         self.weight = weight
         self.reps = reps
 
-class Workout(Base):
-    __tablename__ = "workouts"
+# Create a scheduled exercises table with dates and Boolean "Done?".
+class Scheduled_Exercise(Exercise):
+    __tablename__ = "scheduled_exercises"
 
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
-    day = Column(Integer)
-    time = Column(Text)
+    exercise_id = Column(Integer, ForeignKey('exercises.id'))
+    date = Column(DateTime, default=datetime.datetime.utcnow)
+    done = Column(Boolean)
 
-    def __init__(self, user_id, day, time):
+    def __init__(self, user_id, day, type, weight, reps, exercise_id, date, done):
         self.user_id = user_id
         self.day = day
-        self.time = time
+        self.type = type
+        self.weight = weight
+        self.reps = reps
+        self.exercise_id = exercise_id
+        self.date = date
+        self.done = done
 
 Base.metadata.create_all(engine)

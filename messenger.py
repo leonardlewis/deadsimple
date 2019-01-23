@@ -1,3 +1,6 @@
+# https://www.ostechnix.com/a-beginners-guide-to-cron-jobs/
+# https://crontab.guru
+
 import time
 from twilio_client import client, number
 from sqlalchemy import create_engine

@@ -148,12 +148,7 @@ def sms_reply():
     localtime = time.localtime(time.time())
     resp = MessagingResponse()
 
-    counter = session.get('counter', 0)
-    session['counter'] = counter
-
     if message == 'Y':
-        counter += 1
-
         Session = sessionmaker(bind=engine)
         s = Session()
 
@@ -162,7 +157,9 @@ def sms_reply():
         exercises = s.query(Exercise).filter(Exercise.user_id == user.id, Exercise.day == localtime[6])
 
         for x in exercises:
-            resp.message(f"All right, go do {x.type}, {x.weight}, {x.reps}.")
+            # Add in a check to verify that the exercise is not already complete in the scheduled exercises table.
+            resp.message(f"All right, go do {x.type}, {x.weight} pounds, {x.reps} reps.")
+            # Write to scheduled exercises table that the exercise was done.
 
     else:
         resp.message("OK, see you next time!")
