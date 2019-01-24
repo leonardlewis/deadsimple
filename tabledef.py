@@ -42,10 +42,16 @@ class Exercise(Base):
         self.reps = reps
 
 # Create a scheduled exercises table with dates and Boolean "Done?".
-class Scheduled_Exercise(Exercise):
+class Scheduled_Exercise(Base):
     __tablename__ = "scheduled_exercises"
 
+    id = Column(Integer, primary_key=True)
     exercise_id = Column(Integer, ForeignKey('exercises.id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
+    day = Column(Integer)
+    type = Column(String)
+    weight = Column(Integer)
+    reps = Column(Integer)
     date = Column(DateTime, default=datetime.datetime.utcnow)
     done = Column(Boolean)
 

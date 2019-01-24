@@ -15,7 +15,7 @@ engine = create_engine('sqlite:///deadsimple.db', echo=True)
 localtime = time.localtime(time.time())
 Session = sessionmaker(bind=engine)
 s = Session()
-query = s.query(Exercise).filter(Exercise.day == localtime[6])
+query = s.query(Scheduled_Exercise).filter(Scheduled_Exercise.day == localtime[6])
 
 # Create a deduplicated list of user IDs from the query.
 users = set()

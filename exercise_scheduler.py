@@ -1,6 +1,7 @@
 ## After you get this working, write a shell script that executes it. The
 ## Cron job will run that shell script.
 import time
+import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from tabledef import *
@@ -8,6 +9,7 @@ from tabledef import *
 
 # Look up exercises scheduled for today.
 localtime = time.localtime(time.time())
+formatted_localtime = time.asctime(time.localtime(time.time()))
 Session = sessionmaker(bind=engine)
 s = Session()
 query = s.query(Exercise).filter(Exercise.day == localtime[6])
@@ -23,7 +25,7 @@ for x in query:
     weight = x.weight
     reps = x.reps
     exercise_id = x.id
-    date = '2019-1-23'
+    date = datetime.datetime.utcnow()
     done = False
 
     # Script is adding to Exercises table, so maybe make Scheduled_Exercise not a child.

@@ -8,7 +8,7 @@ import time
 from flask import Flask, session, redirect, render_template, url_for, request
 from flask import flash
 from twilio.twiml.messaging_response import MessagingResponse
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, update
 from sqlalchemy.orm import sessionmaker
 from tabledef import *
 
@@ -154,12 +154,21 @@ def sms_reply():
 
         query = s.query(User).filter(User.phone == user_number)
         user = query.first()
-        exercises = s.query(Exercise).filter(Exercise.user_id == user.id, Exercise.day == localtime[6])
+        exercises = s.query(Scheduled_Exercise).filter(Scheduled_Exercise.user_id == user.id, Scheduled_Exercise.day == localtime[6], Scheduled_Exercise.done == False)
+        first_exercise = exercises.first()
+        resp.message(f"All right, go do {first_exercise.type}, {first_exercise.weight} pounds, {first_exercise.reps} reps. Reply 'D' when you're done.")
+        last_exercise = first_exercise
 
-        for x in exercises:
-            # Add in a check to verify that the exercise is not already complete in the scheduled exercises table.
-            resp.message(f"All right, go do {x.type}, {x.weight} pounds, {x.reps} reps.")
-            # Write to scheduled exercises table that the exercise was done.
+    elif message == 'D':
+        Session = sessionmaker(bind=engine)
+        s = Session()
+
+        # Bug: last_exercise referenced before assignment.
+        last_exercise.update({"done": True})
+        exercises = s.query(Scheduled_Exercise).filter(Scheduled_Exercise.user_id == user.id, Scheduled_Exercise.day == localtime[6], Scheduled_Exercise.done == False)
+        next_exercise = exercises.first()
+        resp.message(f"All right, go do {next_exercise.type}, {next_exercise.weight} pounds, {next_exercise.reps} reps. Reply 'D' when you're done.")
+        last_exercise = next_exercise
 
     else:
         resp.message("OK, see you next time!")
