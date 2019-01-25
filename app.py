@@ -163,12 +163,22 @@ def sms_reply():
         Session = sessionmaker(bind=engine)
         s = Session()
 
-        # Bug: last_exercise referenced before assignment.
-        last_exercise.update({"done": True})
+        query = s.query(User).filter(User.phone == user_number)
+        user = query.first()
         exercises = s.query(Scheduled_Exercise).filter(Scheduled_Exercise.user_id == user.id, Scheduled_Exercise.day == localtime[6], Scheduled_Exercise.done == False)
-        next_exercise = exercises.first()
-        resp.message(f"All right, go do {next_exercise.type}, {next_exercise.weight} pounds, {next_exercise.reps} reps. Reply 'D' when you're done.")
-        last_exercise = next_exercise
+        last_exercise = exercises.first()
+        last_exercise.done = True
+
+        exercises = s.query(Scheduled_Exercise).filter(Scheduled_Exercise.user_id == user.id, Scheduled_Exercise.day == localtime[6], Scheduled_Exercise.done == False)
+
+        if len(exercises.all()) != 0:
+            next_exercise = exercises.first()
+            resp.message(f"All right, go do {next_exercise.type}, {next_exercise.weight} pounds, {next_exercise.reps} reps. Reply 'D' when you're done.")
+
+        elif len(exercises.all()) == 0:
+            resp.message("Great workout today! See you next time!")
+
+        s.commit()
 
     else:
         resp.message("OK, see you next time!")
