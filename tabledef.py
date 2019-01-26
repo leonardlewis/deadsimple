@@ -33,13 +33,15 @@ class Exercise(Base):
     type = Column(String)
     weight = Column(Integer)
     reps = Column(Integer)
+    deleted = Column(Boolean)
 
-    def __init__(self, user_id, day, type, weight, reps):
+    def __init__(self, user_id, day, type, weight, reps, deleted):
         self.user_id = user_id
         self.day = day
         self.type = type
         self.weight = weight
         self.reps = reps
+        self.deleted = deleted
 
 # Create a scheduled exercises table with dates and Boolean "Done?".
 class Scheduled_Exercise(Base):

@@ -7,12 +7,12 @@ from sqlalchemy.orm import sessionmaker
 from tabledef import *
 
 
-# Look up exercises scheduled for today.
+# Look up exercises scheduled for today (not deleted).
 localtime = time.localtime(time.time())
 formatted_localtime = time.asctime(time.localtime(time.time()))
 Session = sessionmaker(bind=engine)
 s = Session()
-query = s.query(Exercise).filter(Exercise.day == localtime[6])
+query = s.query(Exercise).filter(Exercise.day == localtime[6], Exercise.deleted == False)
 
 # Create timestamped rows in the scheduled_exercises schedule.
 Session = sessionmaker(bind=engine)

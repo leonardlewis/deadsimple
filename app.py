@@ -97,7 +97,7 @@ def show_workout():
 
     Session = sessionmaker(bind=engine)
     s = Session()
-    result = s.query(Exercise).filter(Exercise.user_id == user_id, Exercise.day == day)
+    result = s.query(Exercise).filter(Exercise.user_id == user_id, Exercise.day == day, Exercise.deleted == False)
 
     return render_template('workout.html', day=day_text, data=result)
 
@@ -109,11 +109,12 @@ def do_add_exercise():
     type = request.form['type']
     weight = request.form['weight']
     reps = request.form['reps']
+    deleted = False
 
     Session = sessionmaker(bind=engine)
     s = Session()
 
-    exercise = Exercise(user_id, day, type, weight, reps)
+    exercise = Exercise(user_id, day, type, weight, reps, deleted)
     s.add(exercise)
     s.commit()
 
@@ -129,8 +130,9 @@ def do_delete_exercise():
     Session = sessionmaker(bind=engine)
     s = Session()
 
-    s.query(Exercise).filter(Exercise.id == id).\
-        delete(synchronize_session=False)
+    query = s.query(Exercise).filter(Exercise.id == id)
+    exercise_to_delete = query.first()
+    exercise_to_delete.deleted = True
     s.commit()
 
     return redirect(f'/workout?day={day}')
