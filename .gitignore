@@ -5,3 +5,4 @@
 env/
 config.py
 twilio_client.py
+notes.txt

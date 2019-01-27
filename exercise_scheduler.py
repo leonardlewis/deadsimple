@@ -1,5 +1,3 @@
-## After you get this working, write a shell script that executes it. The
-## Cron job will run that shell script.
 import time
 import datetime
 from sqlalchemy import create_engine
