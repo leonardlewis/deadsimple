@@ -1,6 +1,3 @@
-# Some references
-# http://blog.appliedinformaticsinc.com/managing-cron-jobs-with-python-crontab/
-# https://realpython.com/flask-by-example-part-1-project-setup/
 # http://flask.pocoo.org/docs/1.0/config/
 
 import os
