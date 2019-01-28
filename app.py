@@ -2,6 +2,7 @@
 
 import os
 import time
+import bcrypt
 from flask import Flask, session, redirect, render_template, url_for, request
 from flask import flash
 from twilio.twiml.messaging_response import MessagingResponse
@@ -33,10 +34,13 @@ def do_create_user():
     POST_PASSWORD = request.form['password']
     POST_NUMBER = request.form['phone']
 
+    POST_PASSWORD_BYTES = bytes(POST_PASSWORD, 'utf-8')
+    POST_PASSWORD_ENCRYPTED = bcrypt.hashpw(POST_PASSWORD_BYTES, bcrypt.gensalt())
+
     Session = sessionmaker(bind=engine)
     s = Session()
 
-    user = User(POST_FIRST, POST_LAST, POST_EMAIL, POST_PASSWORD, POST_NUMBER)
+    user = User(POST_FIRST, POST_LAST, POST_EMAIL, POST_PASSWORD_ENCRYPTED, POST_NUMBER)
     s.add(user)
     s.commit()
 
@@ -51,15 +55,21 @@ def do_authenticate():
     POST_EMAIL = request.form['email']
     POST_PASSWORD = request.form['password']
 
+    POST_PASSWORD_BYTES = bytes(POST_PASSWORD, 'utf-8')
+    POST_PASSWORD_ENCRYPTED = bcrypt.hashpw(POST_PASSWORD_BYTES, bcrypt.gensalt())
+
     Session = sessionmaker(bind=engine)
     s = Session()
-    query = s.query(User).filter(User.email.in_([POST_EMAIL]), User.password.in_([POST_PASSWORD]))
+    query = s.query(User).filter(User.email.in_([POST_EMAIL]))
     user = query.first()
-    if user:
+
+    print(user.password)
+    print(POST_PASSWORD_ENCRYPTED)
+
+    if bcrypt.checkpw(POST_PASSWORD_BYTES, user.password):
         session['logged_in'] = True
         session['email'] = user.email
         session['id'] = user.id
-        s.commit()
     else:
         flash('Wrong password!')
 
