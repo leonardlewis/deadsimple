@@ -1,0 +1,14 @@
+README.md
+setup.py
+deadsimple/__init__.py
+deadsimple/app.py
+deadsimple/config.py
+deadsimple/exercise_scheduler.py
+deadsimple/messenger.py
+deadsimple/tabledef.py
+deadsimple/twilio_client.py
+deadsimple.egg-info/PKG-INFO
+deadsimple.egg-info/SOURCES.txt
+deadsimple.egg-info/dependency_links.txt
+deadsimple.egg-info/requires.txt
+deadsimple.egg-info/top_level.txt
