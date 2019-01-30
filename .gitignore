@@ -3,6 +3,7 @@
 *.pyo
 *.db
 *.egg-info
+*/__pycache__/*
 build/*
 dist/
 env/
