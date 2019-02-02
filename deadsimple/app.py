@@ -3,6 +3,7 @@
 import os
 import time
 import bcrypt
+import random
 from flask import Flask, session, redirect, render_template, url_for, request
 from flask import flash
 from twilio.twiml.messaging_response import MessagingResponse
@@ -96,9 +97,19 @@ days = {"Monday": 0,
         "Sunday": 6
        }
 
+emoji = {"Monday": [u'\U0001f607', u'\U0001f61f'],
+         "Tuesday": [u'\U0001f61b', u'\U0001f928'],
+         "Wednesday": [u'\U0001f62c', u'\U0001f634'],
+         "Thursday": [u'\U0001f915', u'\U0001f635'],
+         "Friday": [u'\U0001f60e', u'\U0001f600'],
+         "Saturday": [u'\U0001f600', u'\U0001f643'],
+         "Sunday": [u'\U0001f604']
+        }
+
 @app.route("/workout")
 def show_workout():
-    day_text = request.args.get('day', 'monday')
+
+    day_text = request.args.get('day', 'Monday')
     day = days[day_text]
     user_id = session['id']
 
@@ -106,7 +117,9 @@ def show_workout():
     s = Session()
     result = s.query(Exercise).filter(Exercise.user_id == user_id, Exercise.day == day, Exercise.deleted == False)
 
-    return render_template('workout.html', day=day_text, data=result)
+    random_emoji = random.choice(emoji[day_text])
+
+    return render_template('workout.html', day=day_text, emoji=random_emoji, data=result)
 
 @app.route("/add-exercise", methods = ['POST'])
 def do_add_exercise():

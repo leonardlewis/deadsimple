@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
+{% block title %}
+<a href="/" class="app-title"><h1>Dead Simple {{ day }} {{emoji}}</h1></a>
+{% endblock %}
 {% block content %}
-<h1>{{ day }}</h1>
 <table class="center" id="workout">
   <tr>
     <th>Exercise</th>
@@ -21,8 +23,10 @@
   </tr>
   {% endfor %}
 </table>
+<br/>
+<br/>
 
-<form action="/add-exercise?day={{ day }}" method="POST">
+<form action="/add-exercise?day={{ day }}" method="POST" id="exercise-adder">
   <input type="text" name="type" placeholder="Enter an exercise">
   <input type="number" name="weight" placeholder="Enter weight (lbs)">
   <input type="number" name="reps" placeholder="Enter number of reps">

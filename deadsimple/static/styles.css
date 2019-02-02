@@ -90,7 +90,6 @@ box-shadow: none;
 
 input.delete {
   width: 50px;
-  background-color: none;
 }
 
 .btn {
@@ -147,9 +146,19 @@ a.cta {
 table.center {
   margin-left: auto;
   margin-right: auto;
+  width: 100%;
 }
 
-#workout td, #workout th {
+#workout th {
+  background-color: white;
+  border: 1px solid #ddd;
+  color: black;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+}
+
+#workout td {
   border: 1px solid #ddd;
   padding: 8px;
   background-color: white;
@@ -160,8 +169,10 @@ table.center {
 
 #workout tr:hover {background-color: #ddd}
 
-#workout th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
+#exercise-adder form{
+  width: 100%;
+}
+
+#exercise-adder input{
+  width: 24%;
 }
