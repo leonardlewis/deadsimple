@@ -157,6 +157,30 @@ def do_delete_exercise():
 
     return redirect(f'/workout?day={day}')
 
+@app.route("/workout-log", methods=['GET'])
+def show_workout_log():
+    user_id = session['id']
+
+    Session = sessionmaker(bind=engine)
+    s = Session()
+    result = s.query(Scheduled_Exercise).filter(Scheduled_Exercise.user_id == user_id, Scheduled_Exercise.done == True)
+
+
+    # This is a hack to format the date without using Javascript.
+    formatted_result = []
+
+    for i in result:
+        string_date = str(i.date)
+        formatted_date = string_date[:10]
+        formatted_type = str(i.type)
+        formatted_reps = str(i.reps)
+        formatted_weight = str(i.weight)
+        record = [formatted_date, formatted_type, formatted_weight, formatted_reps]
+        formatted_result.append(record)
+
+    return render_template('workout-log.html', data=formatted_result)
+
+
 @app.route("/sms", methods=['GET', 'POST'])
 def sms_reply():
     """Respond to incoming calls with a simple text message."""
