@@ -13,6 +13,9 @@ from tabledef import *
 
 engine = create_engine('sqlite:///deadsimple.db', echo=True)
 
+Session = sessionmaker(bind=engine)
+s = Session()
+
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
 
@@ -38,9 +41,6 @@ def do_create_user():
     POST_PASSWORD_BYTES = bytes(POST_PASSWORD, 'utf-8')
     POST_PASSWORD_ENCRYPTED = bcrypt.hashpw(POST_PASSWORD_BYTES, bcrypt.gensalt())
 
-    Session = sessionmaker(bind=engine)
-    s = Session()
-
     user = User(POST_FIRST, POST_LAST, POST_EMAIL, POST_PASSWORD_ENCRYPTED, POST_NUMBER)
     s.add(user)
     s.commit()
@@ -59,8 +59,6 @@ def do_authenticate():
     POST_PASSWORD_BYTES = bytes(POST_PASSWORD, 'utf-8')
     POST_PASSWORD_ENCRYPTED = bcrypt.hashpw(POST_PASSWORD_BYTES, bcrypt.gensalt())
 
-    Session = sessionmaker(bind=engine)
-    s = Session()
     query = s.query(User).filter(User.email.in_([POST_EMAIL]))
     user = query.first()
 
@@ -113,8 +111,6 @@ def show_workout():
     day = days[day_text]
     user_id = session['id']
 
-    Session = sessionmaker(bind=engine)
-    s = Session()
     result = s.query(Exercise).filter(Exercise.user_id == user_id, Exercise.day == day, Exercise.deleted == False)
 
     random_emoji = random.choice(emoji[day_text])
@@ -131,9 +127,6 @@ def do_add_exercise():
     reps = request.form['reps']
     deleted = False
 
-    Session = sessionmaker(bind=engine)
-    s = Session()
-
     exercise = Exercise(user_id, day, type, weight, reps, deleted)
     s.add(exercise)
     s.commit()
@@ -147,9 +140,6 @@ def do_delete_exercise():
     id = request.args.get('id')
     day = request.args.get('day')
 
-    Session = sessionmaker(bind=engine)
-    s = Session()
-
     query = s.query(Exercise).filter(Exercise.id == id)
     exercise_to_delete = query.first()
     exercise_to_delete.deleted = True
@@ -161,10 +151,7 @@ def do_delete_exercise():
 def show_workout_log():
     user_id = session['id']
 
-    Session = sessionmaker(bind=engine)
-    s = Session()
     result = s.query(Scheduled_Exercise).filter(Scheduled_Exercise.user_id == user_id, Scheduled_Exercise.done == True)
-
 
     # This is a hack to format the date without using Javascript.
     formatted_result = []
@@ -195,9 +182,6 @@ def sms_reply():
     resp = MessagingResponse()
 
     if message == 'Y':
-        Session = sessionmaker(bind=engine)
-        s = Session()
-
         query = s.query(User).filter(User.phone == user_number)
         user = query.first()
         exercises = s.query(Scheduled_Exercise).filter(Scheduled_Exercise.user_id == user.id, Scheduled_Exercise.day == localtime[6], Scheduled_Exercise.done == False)
@@ -206,9 +190,6 @@ def sms_reply():
         last_exercise = first_exercise
 
     elif message == 'D':
-        Session = sessionmaker(bind=engine)
-        s = Session()
-
         query = s.query(User).filter(User.phone == user_number)
         user = query.first()
         exercises = s.query(Scheduled_Exercise).filter(Scheduled_Exercise.user_id == user.id, Scheduled_Exercise.day == localtime[6], Scheduled_Exercise.done == False)
