@@ -4,6 +4,9 @@
 *.db
 *.egg-info
 *.eb-ignore
+*.ebignore
+*.DS_Store
+*.bash_profile
 */__pycache__/*
 build/*
 dist/
