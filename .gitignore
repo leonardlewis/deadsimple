@@ -3,6 +3,7 @@
 *.pyo
 *.db
 *.egg-info
+*.eb-ignore
 */__pycache__/*
 build/*
 dist/
@@ -10,3 +11,9 @@ env/
 config.py
 twilio_client.py
 notes.txt
+.bashprofile
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
