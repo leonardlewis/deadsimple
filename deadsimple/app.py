@@ -1,5 +1,4 @@
 # http://flask.pocoo.org/docs/1.0/config/
-
 import os
 import time
 import bcrypt
@@ -10,6 +9,7 @@ from twilio.twiml.messaging_response import MessagingResponse
 from sqlalchemy import create_engine, update
 from sqlalchemy.orm import sessionmaker
 from tabledef import *
+from config import *
 
 engine = create_engine('sqlite:///deadsimple.db', echo=True)
 
@@ -213,6 +213,3 @@ def sms_reply():
     return str(resp)
 
 print(app.config)
-
-if __name__ == "__main__":
-    app.run()
