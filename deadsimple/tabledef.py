@@ -1,10 +1,11 @@
 import datetime
+import os
 from sqlalchemy import create_engine, ForeignKey
-from sqlalchemy import Column, DateTime, Integer, String, Text, Boolean
+from sqlalchemy import Column, DateTime, Integer, String, Text, Boolean, LargeBinary
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 
-engine = create_engine('sqlite:///deadsimple.db', echo=True)
+engine = create_engine(os.environ['DATABASE_URL'], echo=True)
 Base = declarative_base()
 
 class User(Base):
@@ -14,8 +15,8 @@ class User(Base):
     first_name = Column(String)
     last_name = Column(String)
     email = Column(String)
-    password = Column(String)
-    phone = Column(Integer)
+    password = Column(LargeBinary)
+    phone = Column(String)
 
     def __init__(self, first_name, last_name, email, password, phone):
         self.first_name = first_name

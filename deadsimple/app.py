@@ -11,13 +11,13 @@ from sqlalchemy.orm import sessionmaker
 from tabledef import *
 from config import *
 
-engine = create_engine('sqlite:///deadsimple.db', echo=True)
+app = Flask(__name__)
+app.config.from_object(os.environ['APP_SETTINGS'])
+
+engine = create_engine(os.environ['DATABASE_URL'], echo=True)
 
 Session = sessionmaker(bind=engine)
 s = Session()
-
-app = Flask(__name__)
-app.config.from_object(os.environ['APP_SETTINGS'])
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -38,10 +38,9 @@ def do_create_user():
     POST_PASSWORD = request.form['password']
     POST_NUMBER = request.form['phone']
 
-    POST_PASSWORD_BYTES = bytes(POST_PASSWORD, 'utf-8')
-    POST_PASSWORD_ENCRYPTED = bcrypt.hashpw(POST_PASSWORD_BYTES, bcrypt.gensalt())
+    POST_PASSWORD = bcrypt.hashpw(bytes(POST_PASSWORD, 'utf-8'), bcrypt.gensalt())
 
-    user = User(POST_FIRST, POST_LAST, POST_EMAIL, POST_PASSWORD_ENCRYPTED, POST_NUMBER)
+    user = User(POST_FIRST, POST_LAST, POST_EMAIL, POST_PASSWORD, POST_NUMBER)
     s.add(user)
     s.commit()
 
@@ -56,16 +55,15 @@ def do_authenticate():
     POST_EMAIL = request.form['email']
     POST_PASSWORD = request.form['password']
 
-    POST_PASSWORD_BYTES = bytes(POST_PASSWORD, 'utf-8')
-    POST_PASSWORD_ENCRYPTED = bcrypt.hashpw(POST_PASSWORD_BYTES, bcrypt.gensalt())
+    POST_PASSWORD = bytes(POST_PASSWORD, 'utf-8')
 
     query = s.query(User).filter(User.email.in_([POST_EMAIL]))
     user = query.first()
 
     print(user.password)
-    print(POST_PASSWORD_ENCRYPTED)
+    print(POST_PASSWORD)
 
-    if bcrypt.checkpw(POST_PASSWORD_BYTES, user.password):
+    if bcrypt.checkpw(POST_PASSWORD, user.password):
         session['logged_in'] = True
         session['email'] = user.email
         session['id'] = user.id
@@ -175,7 +173,10 @@ def sms_reply():
     user_number_raw = request.values.get('From')
 
     # This is a hack to remove the country code.
-    user_number = user_number_raw[2:]
+    if user_number_raw[0] == '+':
+        user_number = user_number_raw[2:]
+    else:
+        user_number = user_number_raw
 
     message = request.values.get('Body')
     localtime = time.localtime(time.time())
