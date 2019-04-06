@@ -1,13 +1,14 @@
 # https://www.ostechnix.com/a-beginners-guide-to-cron-jobs/
 # https://crontab.guru
 
+import os
 import time
 from twilio_client import client, number
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import extract
 from tabledef import *
-engine = create_engine('sqlite:///deadsimple.db', echo=True)
+engine = create_engine(os.environ['DATABASE_URL'], echo=True)
 
 # Configure a Cron job to send a workout message every day at 8am.
 
