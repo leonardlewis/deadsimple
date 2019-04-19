@@ -41,6 +41,7 @@ def do_create_user():
     POST_PASSWORD = bcrypt.hashpw(bytes(POST_PASSWORD, 'utf-8'), bcrypt.gensalt())
 
     user = User(POST_FIRST, POST_LAST, POST_EMAIL, POST_PASSWORD, POST_NUMBER)
+    # Add an if-else statement to check if the email or phone number already exists.
     s.add(user)
     s.commit()
 
