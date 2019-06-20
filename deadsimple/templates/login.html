@@ -6,15 +6,23 @@
 You're logged in already!
 
 {% else %}
-<p class="page-title">The world's simplest SMS-based workout tracker.</p>
-<form action="/authenticate" method = "POST" class="login-form">
-  <input type="email" name="email" placeholder="Your email"><br/>
-  <input type="password" name="password" placeholder="Your password"><br/>
-  <input type="submit" value="Log in">
-</form>
-
-<a href="/signup" class="cta">Create an account</a><br/>
-<p>Copyright 2019 Leonard Lewis. All rights reserved.</p>
-
+<div class="container">
+    <p>The world's simplest SMS-based workout tracker.</p>
+  <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+    <div class="card card-signin my-5">
+      <div class="card-body">
+        <form action="/authenticate" method = "POST" class="form-signin">
+          <div class="form-label-group">
+            <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+          </div>
+          <div class="form-label-group">
+            <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+          </div>
+            <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
+        </form>
+      </div>
+    </div>
+  <a href="/signup">Create an account</a><br/>
+</div>
 {% endif %}
 {% endblock %}

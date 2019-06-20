@@ -1,15 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
 <p class="page-title">Set your schedule and forget it. We'll handle the rest.</p>
-<ul class="account-setup">
-  <li><a href="/workout?day=Monday">Monday</a></li>
-  <li><a href="/workout?day=Tuesday">Tuesday</a></li>
-  <li><a href="/workout?day=Wednesday">Wednesday</a></li>
-  <li><a href="/workout?day=Thursday">Thursday</a></li>
-  <li><a href="/workout?day=Friday">Friday</a></li>
-  <li><a href="/workout?day=Saturday">Saturday</a></li>
-  <li><a href="/workout?day=Sunday">Sunday</a></li>
-</ul>
-<a href="/workout-log" class="cta">Workout Log</a>
-<a href="/logout" class="cta">Logout</a>
+<div class="center">
+  <a href="/workout?day=Monday">Monday</a></li><br/>
+  <a href="/workout?day=Tuesday">Tuesday</a></li><br/>
+  <a href="/workout?day=Wednesday">Wednesday</a></li><br/>
+  <a href="/workout?day=Thursday">Thursday</a></li><br/>
+  <a href="/workout?day=Friday">Friday</a></li><br/>
+  <a href="/workout?day=Saturday">Saturday</a></li><br/>
+  <a href="/workout?day=Sunday">Sunday</a></li><br/>
+  <br/>
+  <a href="/workout-log" class="cta">Workout Log</a><br/>
+  <a href="/logout" class="cta">Logout</a>
+</div>
 {% endblock %}

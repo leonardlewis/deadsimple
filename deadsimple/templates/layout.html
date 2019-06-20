@@ -2,12 +2,12 @@
 <html>
   <head>
     <title>Dead Simple</title>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles.css') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='bootstrap.css') }}">
     <meta charset="utf-8">
     {% block head %}
     {% endblock %}
   </head>
-  <body>
+  <body class="text-center">
     {% block title %}
     <a href="/" class="app-title"><h1>Dead Simple</h1></a>
     {% endblock %}
@@ -18,4 +18,7 @@
     {% endblock %}
 
   </body>
+  <footer>
+    <p class="mt-5 mb-3 text-muted">Copyright 2019 Leonard Lewis. All rights reserved.</p>
+  </footer>
 </html>
